@@ -1,0 +1,27 @@
+services:
+  nginx:
+    container_name: nginx 
+    image: debian:slim
+    ports:
+      - "443:443"
+    build:
+      context: .
+      dockerfile: ./requirements/nginx/Dockerfile
+  wordpress:
+    container_name: wordpress 
+    ports:
+      - "9000:9000"
+    volumes:
+      - wordpress_data:/var/www/html
+    build:
+        context: .
+        dockerfile: ./requirements/wordpress/Dockerfile
+  mariadb:
+    container_name: mariadb 
+    ports:
+      - "3306:3306"
+    volumes:
+      - wordpress_db_data:/var/lib/mysql
+    build:
+        context: .
+        dockerfile: ./requirements/mariadb/Dockerfile
