@@ -1,3 +1,3 @@
-FROM debian:bullseye-slim
+# FROM debian:bullseye-slim
 
-LABEL maintainer="anoukan"
+# LABEL maintainer="anoukan"

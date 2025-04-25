@@ -9,4 +9,5 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 EXPOSE 443
+
 CMD ["nginx", "-g", "daemon off;"]
