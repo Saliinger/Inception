@@ -8,6 +8,18 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Create directories for SSL certificates
+RUN mkdir /etc/nginx/ssl
+
+# Generate self-signed SSL certificate
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout /etc/nginx/ssl/key.pem \
+    -out /etc/nginx/ssl/cert.pem \
+    -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=student/CN=anoukan.42.fr"
+
+# Copy nginx configuration
+COPY ./conf/default /etc/nginx/sites-available/default
+
 EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]

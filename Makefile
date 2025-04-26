@@ -7,7 +7,7 @@ ${NAME}: all
 
 all: 
 	echo "anoukan.42.fr" >> /etc/hosts
-	docker compose -f ${COMPOSE_FILE} up 
+	docker compose -f ${COMPOSE_FILE} up -d
 
 down:
 	docker compose -f ${COMPOSE_FILE} down 

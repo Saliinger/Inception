@@ -3,14 +3,14 @@ services:
   # NGINX
   nginx:
     container_name: nginx
-    image: debian:slim
+    image: debian:12-slim
     ports:
       - "443:443"
     build:
       context: .
       dockerfile: ./requirements/nginx/Dockerfile
 
-    restart: unless-stopped
+      #restart: unless-stopped
 
   # WORDPRESS
 
