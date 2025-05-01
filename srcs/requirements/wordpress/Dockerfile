@@ -1,3 +1,6 @@
-# FROM debian:bullseye-slim
+FROM debian:bullseye-slim
 
-# LABEL maintainer="anoukan"
+RUN apt-get update && \
+    apt-get install -y 
+
+LABEL maintainer="anoukan"

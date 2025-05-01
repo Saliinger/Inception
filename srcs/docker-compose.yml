@@ -7,11 +7,26 @@ services:
     ports:
       - "443:443"
     build:
-      context: .
       dockerfile: ./requirements/nginx/Dockerfile
 
-      #restart: unless-stopped
 
+  # MARIADB
+  mariadb:
+    container_name: mariadb
+    image: debian:slim
+    ports:
+      - "3306:3306"
+    # volumes:
+    #   - wordpress_db_data:/var/lib/mysql
+    build:
+      context: .
+      dockerfile: ./requirements/mariadb/Dockerfile
+      # environment:
+      # - MARIADB_DATABASE: ${WORDPRESS_DB_NAME}
+      # - MARIADB_USER: ${WORDPRESS_DB_USER}
+      # - MARIADB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      # - MARIADB_ROOT_PASSWORD: ${WORDPRESS_DB_ADMIN_PASSWORD}
+      
   # WORDPRESS
 
   # wordpress:
@@ -22,7 +37,6 @@ services:
   #   volumes:
   #     - wordpress_data:/var/www/html
   #   build:
-  #     context: .
   #     dockerfile: ./requirements/wordpress/Dockerfile
   #   environment:
   #     - WORDPRESS_DB_HOST: mariadb
@@ -32,22 +46,3 @@ services:
   #     - WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
   #     - WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
   #     - WORDPRESS_ADMIN_USER: ${WORDPRESS_ADMIN_USER}
-  #   restart: unless-stopped
-
-  # MARIADB
-  # mariadb:
-  #   container_name: mariadb
-  #   image: debian:slim
-  #   ports:
-  #     - "3306:3306"
-  #   volumes:
-  #     - wordpress_db_data:/var/lib/mysql
-  #   build:
-  #     context: .
-  #     dockerfile: ./requirements/mariadb/Dockerfile
-  #     environment:
-  #     - MARIADB_DATABASE: ${WORDPRESS_DB_NAME}
-  #     - MARIADB_USER: ${WORDPRESS_DB_USER}
-  #     - MARIADB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
-  #     - MARIADB_ROOT_PASSWORD: ${WORDPRESS_DB_ADMIN_PASSWORD}
-  #   restart: unless-stopped
