@@ -9,40 +9,22 @@ services:
     build:
       dockerfile: ./requirements/nginx/Dockerfile
 
-
   # MARIADB
   mariadb:
     container_name: mariadb
-    image: debian:slim
+    image: debian:12-slim
     ports:
       - "3306:3306"
-    # volumes:
-    #   - wordpress_db_data:/var/lib/mysql
     build:
       context: .
       dockerfile: ./requirements/mariadb/Dockerfile
-      # environment:
-      # - MARIADB_DATABASE: ${WORDPRESS_DB_NAME}
-      # - MARIADB_USER: ${WORDPRESS_DB_USER}
-      # - MARIADB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
-      # - MARIADB_ROOT_PASSWORD: ${WORDPRESS_DB_ADMIN_PASSWORD}
       
   # WORDPRESS
 
-  # wordpress:
-  #   container_name: wordpress
-  #   image: debian:slim
-  #   ports:
-  #     - "9000:9000"
-  #   volumes:
-  #     - wordpress_data:/var/www/html
-  #   build:
-  #     dockerfile: ./requirements/wordpress/Dockerfile
-  #   environment:
-  #     - WORDPRESS_DB_HOST: mariadb
-  #     - WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
-  #     - WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
-  #     - WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
-  #     - WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
-  #     - WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
-  #     - WORDPRESS_ADMIN_USER: ${WORDPRESS_ADMIN_USER}
+  wordpress:
+    container_name: wordpress
+    image: debian:12-slim
+    ports:
+      - "9000:9000"
+    build:
+      dockerfile: ./requirements/wordpress/Dockerfile

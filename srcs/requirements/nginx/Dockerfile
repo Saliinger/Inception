@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:12-slim
 
 LABEL maintainer="anoukan"
 
@@ -15,7 +15,7 @@ RUN mkdir /etc/nginx/ssl
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout /etc/nginx/ssl/key.pem \
     -out /etc/nginx/ssl/cert.pem \
-    -subj "/C=FR/ST=IDF/L=Paris/O=42/OU=student/CN=anoukan.42.fr"
+    -subj "/C=FR/ST=Haut-Rhin/L=Mulhouse/O=42/OU=student/CN=anoukan.42.fr"
 
 # Copy nginx configuration
 COPY ./requirements/nginx/conf/default /etc/nginx/sites-available/default
