@@ -8,6 +8,8 @@ services:
       - "443:443"
     build:
       dockerfile: ./requirements/nginx/Dockerfile
+    volumes:
+      wp-data:/var/www/html:ro
 
   # MARIADB
   mariadb:
