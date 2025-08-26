@@ -3,30 +3,69 @@ services:
   # NGINX
   nginx:
     container_name: nginx
-    image: debian:12-slim
-    ports:
-      - "443:443"
+    image: nginx:custom
     build:
-      dockerfile: ./requirements/nginx/Dockerfile
+      context: ./requirements/nginx
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    # data
     volumes:
       wp-data:/var/www/html:ro
+    env_file:
+      - .env
+    # network
+    networks:
+      - inception
+    ports:
+      - "443:443"
 
   # MARIADB
   mariadb:
     container_name: mariadb
-    image: debian:12-slim
-    ports:
-      - "3306:3306"
+    image: mariadb:custom
     build:
-      context: .
-      dockerfile: ./requirements/mariadb/Dockerfile
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    # data
+    env_file:
+      - .env
+    # network
+    networks:
+      - inception
       
   # WORDPRESS
-
   wordpress:
     container_name: wordpress
-    image: debian:12-slim
-    ports:
-      - "9000:9000"
+    image: wordpress:custom
     build:
-      dockerfile: ./requirements/wordpress/Dockerfile
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    # data
+    env_file:
+      - .env
+    # network
+    networks:
+      - inception
+
+# shared network for all container
+networks:
+  inception:
+    driver: bridge
+
+# shared storage
+volumes:
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/vbox/data/wordpress
+
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/vbox/data/mariadb
