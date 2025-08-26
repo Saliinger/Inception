@@ -7,6 +7,12 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Copy nginx configuration
+COPY ./requirements/mariadb/conf/setup.cnf /etc/mariadb.conf.d/setup.cnf
+COPY ./requirements/mariadb/tool/setup.sh /usr/local/bin/setup.sh
+
+RUN chmod +x /usr/local/bin/setup.sh
+
 EXPOSE 3306
 
-CMD ["mariadbd", "daemon off;"]
+CMD ["/usr/local/bin/setup.sh"]
