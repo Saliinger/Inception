@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
     # data
     volumes:
-      wp-data:/var/www/html:ro
+     - wordpress_data:/var/www/html:ro
     env_file:
       - .env
     # network
