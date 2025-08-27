@@ -8,8 +8,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy mariadb configuration
-COPY ./requirements/mariadb/conf/setup.cnf /etc/mariadb.conf.d/setup.cnf
-COPY ./requirements/mariadb/tool/setup.sh /usr/local/bin/setup.sh
+COPY conf/setup.cnf /etc/mariadb.conf.d/setup.cnf
+COPY tool/setup.sh /usr/local/bin/setup.sh
 
 RUN chmod +x /usr/local/bin/setup.sh
 

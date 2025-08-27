@@ -5,7 +5,7 @@ LABEL maintainer="anoukan"
 RUN apt-get update 
     # apt-get install -y 
 
-COPY ./requirements/wordpress/tool/setup.sh /usr/local/bin/setup.sh
+COPY tool/setup.sh /usr/local/bin/setup.sh
 
 RUN chmod +x /usr/local/bin/setup.sh
 
