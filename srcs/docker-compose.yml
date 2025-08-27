@@ -32,6 +32,9 @@ services:
     # data
     env_file:
       - .env
+    secrets:
+      - db_password
+      - db_root_password
     # network
     networks:
       - inception
@@ -47,6 +50,9 @@ services:
     # data
     env_file:
       - .env
+    secrets:
+      - db_password
+      - db_root_password
     # network
     networks:
       - inception
