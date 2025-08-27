@@ -1,5 +1,7 @@
 FROM debian:bullseye
 
+LABEL maintainer="anoukan"
+
 RUN apt-get update && apt-get install -y \
     php7.4-fpm \
     php7.4-mysql \
