@@ -16,7 +16,7 @@ RUN mkdir -p /etc/ssl/certs && \
 
 # Copy configuration files
 COPY conf/nginx.conf /etc/nginx/nginx.conf
-COPY tool/start.sh /usr/local/bin/start.sh
+COPY tool/setup.sh /usr/local/bin/start.sh
 
 RUN chmod +x /usr/local/bin/start.sh
 
