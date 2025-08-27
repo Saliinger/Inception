@@ -53,7 +53,7 @@ services:
     env_file:
       - .env
     volumes:
-      - wordpress_data:/var/ww/html
+      - wordpress_data:/var/www/html
     secrets:
       - db_password
       - db_root_password
