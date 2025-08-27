@@ -1,4 +1,4 @@
-!bin/bash
+#!/bin/bash
 
 cd /var/www
 sudo wget http://fr.wordpress.org/latest-fr_FR.tar.gz
