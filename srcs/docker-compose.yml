@@ -32,6 +32,8 @@ services:
     # data
     env_file:
       - .env
+    volumes:
+      - mariadb_data:/var/lib/mysql
     secrets:
       - db_password
       - db_root_password
@@ -50,6 +52,8 @@ services:
     # data
     env_file:
       - .env
+    volumes:
+      - wordpress_data:/var/ww/html
     secrets:
       - db_password
       - db_root_password
