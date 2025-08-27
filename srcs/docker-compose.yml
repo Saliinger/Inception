@@ -73,3 +73,9 @@ volumes:
       type: none
       o: bind
       device: /home/anoukan/data/mariadb
+
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt

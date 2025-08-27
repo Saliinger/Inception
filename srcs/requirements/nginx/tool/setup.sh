@@ -1,3 +1,4 @@
 #!/bin/bash
 
-echo "hello world"
+# Start nginx in foreground
+nginx -g "daemon off;"

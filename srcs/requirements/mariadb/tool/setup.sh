@@ -1,16 +1,55 @@
 #!/bin/bash
 
-# Create SQL script
-sql_commands=$(cat <<EOF
-CREATE DATABASE IF NOT EXISTS \`$MARIADB_DATABASE\`;
-CREATE USER IF NOT EXISTS '$MARIADB_USER'@'localhost' IDENTIFIED BY '$MARIADB_PASSWORD';
-GRANT ALL PRIVILEGES ON \`$MARIADB_DATABASE\`.* TO '$MARIADB_USER'@'localhost';
+# Read secrets
+DB_PASSWORD=$(cat /run/secrets/db_password)
+DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
+
+# Create directory and set permissions
+mkdir -p /var/run/mysqld
+chown -R mysql:mysql /var/run/mysqld
+chown -R mysql:mysql /var/lib/mysql
+
+# Initialize database if WordPress database doesn't exist
+if [ ! -d "/var/lib/mysql/$MYSQL_DATABASE" ]; then
+    echo "Initializing MariaDB..."
+    
+    # Initialize the MySQL data directory
+    mysql_install_db --user=mysql --datadir=/var/lib/mysql --rpm
+    
+    echo "Starting MariaDB temporarily to configure it..."
+    
+    # Start MariaDB temporarily to configure it
+    mysqld_safe --user=mysql --datadir=/var/lib/mysql &
+    MYSQL_PID=$!
+    
+    # Wait for MariaDB to start
+    until mysqladmin ping --silent; do
+        echo "Waiting for MariaDB to start..."
+        sleep 2
+    done
+    
+    echo "Configuring MariaDB..."
+    
+    # Create databases and users
+    mysql -u root <<EOF
+ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_ROOT_PASSWORD';
+DELETE FROM mysql.user WHERE User='';
+DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
+CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
+CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$DB_PASSWORD';
+GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';
 FLUSH PRIVILEGES;
 EOF
-)
+    
+    echo "MariaDB configured successfully"
+    
+    # Stop temporary MariaDB
+    kill $MYSQL_PID
+    wait $MYSQL_PID
+fi
 
-# Execute SQL commands
-mysql -u"$MARIADB_USER" -p"$MARIADB_ROOT_PASSWORD" -e "$sql_commands"
-
-sudo systemctl enable mariadb
-sudo systemctl start mariadb
+echo "Starting MariaDB in foreground..."
+# Start MariaDB in foreground
+exec mysqld_safe --user=mysql --datadir=/var/lib/mysql
