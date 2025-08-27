@@ -1,22 +1,28 @@
-NAME = Inception
-COMPOSE_FILE = ./srcs/docker-compose.yml
+all: up
 
-.PHONY: all ${NAME} down clean fclean re
-
-${NAME}: all
-
-all: 
-	echo "anoukan.42.fr" >> /etc/hosts
-	docker compose -f ${COMPOSE_FILE} up -d
+up:
+	sudo mkdir -p /home/anoukan/data/wordpress
+	sudo mkdir -p /home/anoukan/data/mysql
+	sudo chown -R $(USER):$(USER) /home/anoukan/data
+	docker-compose -f srcs/docker-compose.yml up -d --build
 
 down:
-	docker compose -f ${COMPOSE_FILE} down 
+	docker-compose -f srcs/docker-compose.yml down
 
 clean: down
+	docker system prune -af
+	docker volume prune -f
 
-fclean: down
+fclean: clean
+	sudo rm -rf /home/anoukan/data/wordpress
+	sudo rm -rf /home/anoukan/data/mysql
 
 re: fclean all
 
+logs:
+	docker-compose -f srcs/docker-compose.yml logs -f
 
-# -d is for detach and put it as a background task
+status:
+	docker-compose -f srcs/docker-compose.yml ps
+
+.PHONY: all up down clean fclean re logs status
