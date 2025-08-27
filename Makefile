@@ -4,10 +4,10 @@ up:
 	sudo mkdir -p /home/anoukan/data/wordpress
 	sudo mkdir -p /home/anoukan/data/mysql
 	sudo chown -R $(USER):$(USER) /home/anoukan/data
-	docker-compose -f srcs/docker-compose.yml up -d --build
+	docker compose -f srcs/docker-compose.yml up -d --build
 
 down:
-	docker-compose -f srcs/docker-compose.yml down
+	docker compose -f srcs/docker-compose.yml down
 
 clean: down
 	docker system prune -af
@@ -20,9 +20,9 @@ fclean: clean
 re: fclean all
 
 logs:
-	docker-compose -f srcs/docker-compose.yml logs -f
+	docker compose -f srcs/docker-compose.yml logs -f
 
 status:
-	docker-compose -f srcs/docker-compose.yml ps
+	docker compose -f srcs/docker-compose.yml ps
 
 .PHONY: all up down clean fclean re logs status
