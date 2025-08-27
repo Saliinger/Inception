@@ -2,27 +2,24 @@ FROM debian:bullseye
 
 LABEL maintainer="anoukan"
 
-# Install nginx
-RUN apt-get update && \
-    apt-get install -y nginx openssl && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+    nginx \
+    openssl \
+    && rm -rf /var/lib/apt/lists/*
 
-# Create directories for SSL certificates
-RUN mkdir /etc/nginx/ssl
+# Create SSL certificate
+RUN mkdir -p /etc/ssl/certs && \
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout /etc/ssl/certs/nginx-selfsigned.key \
+    -out /etc/ssl/certs/nginx-selfsigned.crt \
+    -subj "/C=FR/ST=Paris/L=Paris/O=42/OU=42/CN=jalbiser.42.fr"
 
-# Generate self-signed SSL certificate
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout /etc/nginx/ssl/key.pem \
-    -out /etc/nginx/ssl/cert.pem \
-    -subj "/C=FR/ST=Haut-Rhin/L=Mulhouse/O=42/OU=student/CN=anoukan.42.fr"
+# Copy configuration files
+COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY tool/start.sh /usr/local/bin/start.sh
 
-# Copy nginx configuration
-COPY conf/default /etc/nginx/sites-available/default
-COPY tool/setup.sh /usr/local/bin/setup.sh
-
-RUN chmod +x /usr/local/bin/setup.sh
+RUN chmod +x /usr/local/bin/start.sh
 
 EXPOSE 443
 
-CMD ["/usr/local/bin/setup.sh"]
+CMD ["/usr/local/bin/start.sh"]
