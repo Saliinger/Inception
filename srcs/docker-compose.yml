@@ -18,6 +18,8 @@ services:
       - inception
     ports:
       - "443:443"
+    depends_on:
+      - wordpress
 
   # MARIADB
   mariadb:
@@ -48,6 +50,8 @@ services:
     # network
     networks:
       - inception
+    depends_on:
+      - mariadb
 
 # shared network for all container
 networks:
