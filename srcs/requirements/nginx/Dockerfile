@@ -15,7 +15,7 @@ RUN mkdir -p /etc/ssl/certs && \
     -subj "/C=FR/ST=Paris/L=Paris/O=42/OU=42/CN=jalbiser.42.fr"
 
 # Copy configuration files
-COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY conf/default.conf /etc/nginx/nginx.conf
 COPY tool/setup.sh /usr/local/bin/start.sh
 
 RUN chmod +x /usr/local/bin/start.sh
