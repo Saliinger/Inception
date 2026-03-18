@@ -1,0 +1,56 @@
+services:
+  nginx:
+    build: ./requirements/nginx
+    ports:
+      - 443:443
+    depends_on:
+      - wordpress
+    env_file:
+      - .env
+    networks:
+    - inception
+    restart: unless-stopped
+
+  mariadb:
+    build: ./requirements/mariadb
+    volumes:
+      - mariadb:/var/lib/mysql
+    env_file:
+      - .env
+    secrets:
+      - db_password
+      - db_root_password
+    networks:
+    - inception
+    restart: unless-stopped
+
+  wordpress:
+    build: ./requirements/wordpress
+    volumes:
+      - wordpress:/var/wwww/html
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+    secrets:
+      - credential
+    networks:
+      - inception
+    restart: unless-stopped
+
+networks:
+  inception:
+    driver: bridge
+    
+secrets:
+  credential:
+    file: ../secrets/credential.txt
+  db_password: 
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+
+volumes: 
+  mariadb:
+  wordpress:
+  logs:
