@@ -1,6 +1,8 @@
 services:
   nginx:
     build: ./requirements/nginx
+    volumes:
+      - wordpress:/var/www/html
     ports:
       - 443:443
     depends_on:
@@ -34,6 +36,7 @@ services:
       - .env
     secrets:
       - credential
+      - db_password
     networks:
       - inception
     restart: unless-stopped
@@ -52,5 +55,12 @@ secrets:
 
 volumes: 
   mariadb:
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/$USERNAME/data/mariadb
   wordpress:
-  logs:
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/$USERNAME/data/wordpress

@@ -10,6 +10,10 @@ REGULAR_USER=$(sed -n '4p'  /run/secrets/credential)
 REGULAR_EMAIL=$(sed -n '5p'  /run/secrets/credential)
 REGULAR_PASSWORD=$(sed -n '6p' /run/secrets/credential)
 
+until [ mysqladmin ping ]; do
+	sleep 1
+done
+
 if [ ! -f "/var/www/html/wp-config.php" ]; then
 	wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -O wp-cli.phar
 
