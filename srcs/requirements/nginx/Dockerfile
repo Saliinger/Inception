@@ -1,12 +1,14 @@
-FROM debian:bullseye-slim
+FROM debian:bullseye
 
 LABEL maintainer="anoukan"
 
-RUN apt-get update && apt-get install nginx -y && rm -rf /var/lib/apt/list/*
+RUN apt-get update && apt-get install nginx openssl gettext -y && rm -rf /var/lib/apt/list/*
 
-COPY ../conf/nginx.conf /etc/nginx/
-COPY ../script .
+COPY ./conf/nginx.conf /tmp/nginx.conf.template
+COPY ./script/run.sh /run.sh
+
+RUN chmod +x /run.sh
 
 EXPOSE 443
 
-ENTRYPOINT [ "nginx -daemon off" ]
+ENTRYPOINT [ "/run.sh" ]
